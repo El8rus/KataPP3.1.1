@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 @Controller
 public class UserController {
 
@@ -38,24 +37,25 @@ public class UserController {
 
     @PostMapping("/users")
     public String addUser(@ModelAttribute("userForm") User newUser) {
-        userService.add(newUser);
+        userService.save(newUser);
         return "redirect:/users";
     }
 
     @GetMapping("users/{id}")
-    public String editUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("editUser", userService.findUserById(id));
+    public String editUser(@PathVariable("id") Long id, Model model) {
+        User editUser = userService.findUserById(id);
+        model.addAttribute("editUser", editUser);
         return "edit_user";
     }
 
     @PatchMapping("users/{id}")
-    public String saveUser(@PathVariable("id") long id, @ModelAttribute("editUser") User editUser) {
-        userService.update(id, editUser);
+    public String saveUser(@PathVariable("id") Long id, User editUser) {
+        userService.save(editUser);
         return "redirect:/users";
     }
 
     @DeleteMapping("users/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    public String deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return "redirect:/users";
     }
